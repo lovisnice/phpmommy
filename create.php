@@ -37,12 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Додати</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -50,23 +49,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 <div class="container py-3">
-    <?php
-    include $_SERVER['DOCUMENT_ROOT'] . "/header.php";
-    ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . "/header.php"; ?>
 
     <h1 class="text-center">Додати категорію</h1>
 
     <form class="col-md-6 offset-md-3" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="name" class="form-label">Назва</label>
-            <input type="text" class="form-control" name="name" id="name" >
+            <input type="text" class="form-control" name="name" id="name" required>
         </div>
 
         <div class="mb-3">
             <div class="row">
-                <img class="imageDiv" id="previewImage" src="">
+                <img class="imageDiv" id="previewImage" src="/path/to/default/image.jpg" alt="Preview Image" style="cursor: pointer;">
                 <label for="image" class="form-label">Фото</label>
-                <input type="file" class="form-control" name="image" id="image" onchange="previewImage()">
+                <input type="file" class="form-control" name="image" id="image" onchange="previewImage()" required>
             </div>
         </div>
 
@@ -90,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             reader.onload = function (e) {
                 preview.src = e.target.result;
-                console.log(e.target.result);
+                //console.log("Image preview updated:", e.target.result);
             };
 
             reader.readAsDataURL(input.files[0]);
@@ -99,6 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Ensure the function is defined before the onchange event is triggered
     document.getElementById('image').onchange = previewImage;
+
+    // Add event listener to the preview image to trigger the file input
+    document.getElementById('previewImage').addEventListener('click', function () {
+        document.getElementById('image').click();
+    });
 </script>
 
 </body>
