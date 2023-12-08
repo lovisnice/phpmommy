@@ -1,4 +1,6 @@
-<?php global $pdo; ?>
+<?php global $pdo;
+    global $delid;
+?>
 <!doctype html>
 <html lang="uk">
 <head>
@@ -18,20 +20,6 @@
     ?>
 
     <h1 class="text-center">Категорії</h1>
-    <?php
-    $n=2;
-    $list = array();
-    $list[0] = [
-        "id"=>1,
-        "name"=>"Піжами",
-        "image"=>"https://content1.rozetka.com.ua/goods/images/big/377606241.jpg"
-    ];
-    $list[1] = [
-        "id"=>2,
-        "name"=>"Шорти",
-        "image"=>"https://content1.rozetka.com.ua/goods/images/big/318293701.jpg"
-    ];
-    ?>
     <table class="table">
         <thead>
         <tr>
@@ -65,8 +53,11 @@
                     <?php echo $row["name"]; ?>
                 </td>
                 <td>
-                    <a href="#" class="btn btn-info">Переглянути</a>
+                    <a href="#" class="btn btn-info" onclick="viewCategory(<?php echo $row['id']; ?>)">Переглянути</a>
+                    <a href="/edit.php?id=<?php echo $row["id"]; ?>" class="btn btn-dark">Змінить</a>
+                    <button class="btn btn-danger" onclick="confirmDeleteCategory(<?php echo $delid = $row['id']; ?>)">Видалити</button>
                 </td>
+
             </tr>
         <?php } ?>
         </tbody>
@@ -74,6 +65,53 @@
 </div>
 
 
+
+
 <script src="/js/bootstrap.bundle.min.js"></script>
+<script>
+    function viewCategory(categoryId) {
+        // Implement your logic for viewing category
+        console.log('View category:', categoryId);
+    }
+
+    function editCategory(categoryId) {
+        // Implement your logic for editing category
+        console.log('Edit category:', categoryId);
+    }
+
+    function deleteCategory(categoryId) {
+        console.log("work");
+    }
+
+    function confirmDeleteCategory(categoryId) {
+        // Show a confirmation dialog
+        let isConfirmed = confirm('Ви впевнені, що хочете видалити категорію?');
+
+        if (isConfirmed) {
+            // If confirmed, send a Fetch request to the server to delete the category
+            fetch('delete_category.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: categoryId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the server response, e.g., refresh the page or update UI
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } else {
+            console.log('Deletion canceled');
+        }
+
+        location.reload();
+
+    }
+</script>
+
 </body>
 </html>
